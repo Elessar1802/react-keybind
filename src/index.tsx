@@ -274,6 +274,8 @@ export const ShortcutProvider = memo(
       }
       if (key === 'meta' || e.metaKey) {
         keysUp.push('meta');
+        // NOTE: in macos if meta key is pressed no other key's keyup is fired
+        keysDown.current = []
       }
       if (key === 'shift' || e.shiftKey) {
         keysUp.push('shift');

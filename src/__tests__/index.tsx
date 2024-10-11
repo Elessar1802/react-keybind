@@ -296,7 +296,15 @@ describe('react-keybind', () => {
         fireEvent.keyDown(node, { key: 'a', metaKey: true });
         fireEvent.keyUp(node, { key: 'a', metaKey: true });
 
-        expect(method).toHaveBeenCalledTimes(4);
+        // NOTE: in macos while the meta key is pressed no other key's keyup event is fired
+        fireEvent.keyDown(node, { key: 'Meta' })
+        fireEvent.keyDown(node, { key: 'a' })
+        fireEvent.keyUp(node, { key: 'Meta' });
+
+        fireEvent.keyDown(node, { key: 'z', altKey: true });
+        fireEvent.keyUp(node, { key: 'z', altKey: true });
+
+        expect(method).toHaveBeenCalledTimes(6);
       });
 
       it('detects alternative modifier keys', () => {
@@ -564,7 +572,7 @@ describe('react-keybind', () => {
 
       it('executes a shortcut when an element is being dragged', () => {
         const DragComponent = () => {
-          const onDragStart = useCallback((event) => {}, []) as DragEventHandler<HTMLDivElement>;
+          const onDragStart = useCallback(() => {}, []) as DragEventHandler<HTMLDivElement>;
           return (
               <div data-testid="drag" draggable="true" onDragStart={onDragStart}>Drag this</div>
           )
